@@ -12,4 +12,8 @@ class ReadEnglish
   def parse_file
     file_path.nil? ? @file = '' : @file = File.read(file_path)
   end
+
+  def characters
+    file.delete("\n").size
+  end
 end

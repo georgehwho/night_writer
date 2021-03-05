@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class ReadEnglishTest < Minitest::Test
   def test_it_exists
     night_writer = mock
-
     reader = ReadEnglish.new('message.txt', night_writer)
 
     assert_instance_of ReadEnglish, reader
@@ -11,7 +10,6 @@ class ReadEnglishTest < Minitest::Test
 
   def test_it_has_readable_attributes
     night_writer = mock
-
     reader = ReadEnglish.new('message.txt', night_writer)
 
     assert_equal 'message.txt', reader.file_path
@@ -25,4 +23,10 @@ class ReadEnglishTest < Minitest::Test
     assert_equal "line1\nline2\nline3", reader.file
   end
 
+  def test_it_can_find_the_number_of_characters_in_the_string
+    night_writer = mock
+    reader = ReadEnglish.new('message.txt', night_writer)
+
+    assert_equal 15, reader.characters
+  end
 end
