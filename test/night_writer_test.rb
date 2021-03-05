@@ -7,8 +7,9 @@ class NightWriterTest < Minitest::Test
 
   def test_it_can_know_where_read_and_write_are
     night_writer = NightWriter.new
-    reader = ReadEnglish.new('message.txt')
-    writer = WriteBraille.new('braille.txt')
+    reader = ReadEnglish.new('message.txt', night_writer)
+    writer = WriteBraille.new('braille.txt', night_writer)
+
     night_writer.stubs(:input).returns(reader)
     night_writer.stubs(:output).returns(writer)
 

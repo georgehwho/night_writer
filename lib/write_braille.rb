@@ -1,8 +1,13 @@
 class WriteBraille
-  attr_reader :file_path
+  attr_reader :file_path,
+              :night_writer
 
-  def initialize(file_path)
+  def initialize(file_path, night_writer)
     @file_path = file_path
+    @night_writer = night_writer
   end
 
+  def parse_file
+    File.read(input)
+  end
 end
