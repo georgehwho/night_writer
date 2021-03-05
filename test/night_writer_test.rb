@@ -3,6 +3,7 @@ require_relative 'test_helper'
 class NightWriterTest < Minitest::Test
   def test_it_exists
     night_writer = NightWriter.new
+    assert_instance_of NightWriter, night_writer
   end
 
   def test_it_can_know_where_read_and_write_are
@@ -17,7 +18,27 @@ class NightWriterTest < Minitest::Test
     assert_equal 'braille.txt', night_writer.output.file_path
   end
 
-  def test_it_find_how_many_characters_are_in_a_file
+  def test_it_can_print_a_confirmation_message
+    night_writer = NightWriter.new
+    reader = ReadEnglish.new('message.txt', night_writer)
+    writer = WriteBraille.new('braille.txt', night_writer)
 
+    night_writer.stubs(:input).returns(reader)
+    night_writer.stubs(:output).returns(writer)
+
+    expected = "Created 'braille.txt' containing 15 characters"
+    assert_equal expected, night_writer.confirmation
+  end
+
+  def test_can_know_reader_contents
+    night_writer = NightWriter.new
+    reader = ReadEnglish.new('message.txt', night_writer)
+    writer = WriteBraille.new('braille.txt', night_writer)
+
+    night_writer.stubs(:input).returns(reader)
+    night_writer.stubs(:output).returns(writer)
+
+    expected = "line1\nline2\nline3"
+    assert_equal expected, night_writer.reader_contents
   end
 end
