@@ -7,4 +7,5 @@ class WriteBrailleTest < Minitest::Test
     assert_instance_of WriteBraille, writer
   end
 
+
 end

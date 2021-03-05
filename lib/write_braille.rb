@@ -6,8 +6,4 @@ class WriteBraille
     @file_path = file_path
     @night_writer = night_writer
   end
-
-  def parse_file
-    File.read(input)
-  end
 end
