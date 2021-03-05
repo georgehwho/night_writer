@@ -1,7 +1,11 @@
 require_relative 'test_helper'
+require './lib/night_writer'
+require './lib/read_english'
+require './lib/write_braille'
 
 class NightWriterTest < Minitest::Test
   def test_it_exists
+
     night_writer = NightWriter.new
     assert_instance_of NightWriter, night_writer
   end
