@@ -1,4 +1,5 @@
 require_relative 'test_helper'
+require './lib/read_english'
 
 class ReadEnglishTest < Minitest::Test
   def test_it_exists
