@@ -1,4 +1,6 @@
 require_relative 'test_helper'
+require './lib/write_braille'
+
 
 class WriteBrailleTest < Minitest::Test
   def test_it_exists
@@ -15,7 +17,14 @@ class WriteBrailleTest < Minitest::Test
     writer = WriteBraille.new('braille.txt', night_writer)
 
     assert_equal 'braille.txt', writer.file_path
-    assert_equal 'hello', writer.file
+  end
+
+  def test_it_can_sanitize_a_file
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('hello')
+    writer = WriteBraille.new('braille.txt', night_writer)
+
+    assert_equal ["h", "e", "l", "l", "o"], writer.file
   end
 
   def test_braille_module_works
@@ -24,5 +33,15 @@ class WriteBrailleTest < Minitest::Test
     writer = WriteBraille.new('braille.txt', night_writer)
 
     assert_equal [[0, "."], [".", "."], [".", "."]], writer.to_braille['a']
+  end
+
+  def test_can_convert_a_file_to_braille
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('he')
+
+    writer = WriteBraille.new('braille.txt', night_writer)
+
+    expected = [[[0, "."], [0, "."]], [[0, 0], [".", 0]], [[".", "."], [".", "."]]]
+    assert_equal expected, writer.convert_to_braille
   end
 end
