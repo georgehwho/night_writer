@@ -14,6 +14,14 @@ class WriteBraille
     write_file(sanitize_file(file))
   end
 
+  def write_file(input)
+    return 'no file path given' if file_path.nil?
+    File.delete(file_path) if File.exist?(file_path)
+    input.each do |row|
+      File.open(file_path, "a") { |f| f.puts "#{row.join}" }
+    end
+  end
+
   def sanitize_file(string = file)
     chars = string.downcase.delete("\n").chars
     arr_braille = convert_to_braille(chars)
@@ -39,13 +47,5 @@ class WriteBraille
       end
     end
     return rows
-  end
-
-  def write_file(input)
-    return 'no file path given' if file_path.nil?
-    File.delete(file_path) if File.exist?(file_path)
-    input.each do |row|
-      File.open(file_path, "a") { |f| f.puts "#{row.join}" }
-    end
   end
 end
