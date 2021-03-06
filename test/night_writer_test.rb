@@ -30,7 +30,7 @@ class NightWriterTest < Minitest::Test
     night_writer.stubs(:input).returns(reader)
     night_writer.stubs(:output).returns(writer)
 
-    expected = "Created 'braille.txt' containing 15 characters"
+    expected = "Created 'braille.txt' containing 23 characters"
     assert_equal expected, night_writer.confirmation
   end
 
@@ -42,7 +42,7 @@ class NightWriterTest < Minitest::Test
     night_writer.stubs(:input).returns(reader)
     night_writer.stubs(:output).returns(writer)
 
-    expected = "line1\nline2\nline3"
+    expected = "lineone\nlinetwo\nlinethree"
     assert_equal expected, night_writer.reader_contents
   end
 end
