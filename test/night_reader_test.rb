@@ -12,7 +12,7 @@ class NightReaderTest < Minitest::Test
 
   def test_it_can_know_where_read_and_write_are
     night_reader = NightReader.new
-    reader = ReadBraille.new('./test/txt_files/nr_braille.txt', night_reader)
+    reader = ReadFile.new('./test/txt_files/nr_braille.txt')
     writer = WriteEnglish.new('original_message.txt', night_reader)
 
     night_reader.stubs(:input).returns(reader)
@@ -24,7 +24,7 @@ class NightReaderTest < Minitest::Test
 
   def test_it_can_print_a_confirmation_message
     night_reader = NightReader.new
-    reader = ReadBraille.new('./test/txt_files/nr_braille.txt', night_reader)
+    reader = ReadFile.new('./test/txt_files/nr_braille.txt')
     writer = WriteEnglish.new('original_message.txt', night_reader)
 
     night_reader.stubs(:input).returns(reader)
@@ -36,7 +36,7 @@ class NightReaderTest < Minitest::Test
 
   def test_can_know_reader_contents
     night_reader = NightReader.new
-    reader = ReadBraille.new('./test/txt_files/nr_braille.txt', night_reader)
+    reader = ReadFile.new('./test/txt_files/nr_braille.txt')
     writer = WriteEnglish.new('original_message.txt', night_reader)
 
     night_reader.stubs(:input).returns(reader)

@@ -1,4 +1,4 @@
-require_relative 'read_english'
+require_relative 'read_file'
 require_relative 'write_braille'
 
 class NightWriter
@@ -6,7 +6,7 @@ class NightWriter
               :output
 
   def initialize
-    @input = ReadEnglish.new(ARGV[0], self)
+    @input = ReadFile.new(ARGV[0])
     @output = WriteBraille.new(ARGV[1], self)
     puts confirmation
   end

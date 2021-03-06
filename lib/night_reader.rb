@@ -1,4 +1,4 @@
-require_relative 'read_braille'
+require_relative 'read_file'
 require_relative 'write_english'
 
 class NightReader
@@ -6,13 +6,13 @@ class NightReader
               :output
 
   def initialize
-    @input = ReadBraille.new(ARGV[0], self)
+    @input = ReadFile.new(ARGV[0])
     @output = WriteEnglish.new(ARGV[1], self)
     puts confirmation
   end
 
   def confirmation
-    "Created '#{output.file_path}' containing #{input.characters} characters"
+    "Created '#{output.file_path}' containing #{input.characters / 2} characters"
   end
 
   def reader_contents
