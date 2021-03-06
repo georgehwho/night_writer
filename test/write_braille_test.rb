@@ -43,13 +43,42 @@ class WriteBrailleTest < Minitest::Test
     assert_equal [[0, "."], [".", "."], [".", "."]], writer.to_braille['a']
   end
 
+  def test_can_convert_a_single_letter
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('h')
+
+    writer = WriteBraille.new('braille.txt', night_writer)
+
+    expected = [[0, "."], [0, 0], [".", "."]]
+    assert_equal expected, writer.convert_to_braille
+    assert_equal  "0.\n00\n..\n", File.read('braille.txt')
+  end
+
+  def test_it_can_check_if_a_row_has_more_than_80_chars
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('h')
+
+    writer = WriteBraille.new('braille.txt', night_writer)
+    array = ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaax".split(''),[],[]]
+    expected = ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".split(''), [], [], ['x']]
+    assert_equal expected, writer.check_more_than_80_chars(array)
+  end
+
   def test_can_convert_a_file_to_braille
     night_writer = mock
     night_writer.stubs(:reader_contents).returns('he')
 
     writer = WriteBraille.new('braille.txt', night_writer)
 
-    expected = [[[0, "."], [0, "."]], [[0, 0], [".", 0]], [[".", "."], [".", "."]]]
+    expected = [[0, ".", 0, "."], [0, 0, ".", 0], [".", ".", ".", "."]]
     assert_equal expected, writer.convert_to_braille
+  end
+
+  def test_it_can_convert_82_postions_to_two_lines
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+    writer = WriteBraille.new('82_test_positions.txt', night_writer)
+    assert_equal File.read('82_positions.txt'), File.read('82_test_positions.txt')
   end
 end
