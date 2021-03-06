@@ -12,7 +12,7 @@ class NightReader
   end
 
   def confirmation
-    "Created '#{output.file_path}' containing #{input.characters / 2} characters"
+    "Created '#{ output.file_path }' containing #{ input.characters / 6 } characters"
   end
 
   def reader_contents
