@@ -10,17 +10,22 @@ class WriteBraille
   def initialize(file_path, night_writer)
     @file_path = file_path
     @night_writer = night_writer
-    @file = sanitize_file(night_writer.reader_contents)
-    write_file(check_more_than_80_chars(convert_to_braille))
+    @file = night_writer.reader_contents
+    write_file(sanitize_file(file))
   end
 
-  def sanitize_file(input)
-    input.downcase.delete("\n").chars
+  def sanitize_file(string = file)
+    chars = string.downcase.delete("\n").chars
+    arr_braille = convert_to_braille(chars)
+    rows = braille_to_rows(arr_braille)
+    check_more_than_80_chars(rows)
   end
 
-  def convert_to_braille(input = file)
-    array_of_braille = input.map { |char| to_braille[char] }
+  def convert_to_braille(chars)
+    chars.map { |char| to_braille[char] }
+  end
 
+  def braille_to_rows(array_of_braille)
     array_of_braille.reduce([[], [], []]) do |memo, braille|
       memo.each_with_index { |arr, index| arr << braille[index] }
     end.map(&:flatten)
