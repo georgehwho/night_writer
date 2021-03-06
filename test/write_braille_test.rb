@@ -19,6 +19,14 @@ class WriteBrailleTest < Minitest::Test
     assert_equal 'braille.txt', writer.file_path
   end
 
+  def test_it_can_write_to_a_file
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('hello')
+    writer = WriteBraille.new('braille.txt', night_writer)
+    writer.write_file([[0, "."], [".", "."], [".", "."]])
+    assert_equal "0.\n..\n..\n", File.read('braille.txt')
+  end
+
   def test_it_can_sanitize_a_file
     night_writer = mock
     night_writer.stubs(:reader_contents).returns('hello')

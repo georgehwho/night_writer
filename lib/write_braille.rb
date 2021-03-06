@@ -11,7 +11,7 @@ class WriteBraille
     @file_path = file_path
     @night_writer = night_writer
     @file = sanitize_file(night_writer.reader_contents)
-    write_file
+    write_file(convert_to_braille)
   end
 
   def sanitize_file(input)
@@ -26,9 +26,11 @@ class WriteBraille
     end
   end
 
-  def write_file
+  def write_file(input)
     return 'no file path given' if file_path.nil?
     File.delete(file_path) if File.exist?(file_path)
-    File.open(file_path, "a") { |f| f.puts "#{file}" }
+    input.each do |row|
+      File.open(file_path, "a") { |f| f.puts "#{row.flatten.join}" }
+    end
   end
 end
