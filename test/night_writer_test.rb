@@ -12,19 +12,19 @@ class NightWriterTest < Minitest::Test
 
   def test_it_can_know_where_read_and_write_are
     night_writer = NightWriter.new
-    reader = ReadEnglish.new('message.txt', night_writer)
+    reader = ReadEnglish.new('./test/txt_files/nw_message.txt', night_writer)
     writer = WriteBraille.new('braille.txt', night_writer)
 
     night_writer.stubs(:input).returns(reader)
     night_writer.stubs(:output).returns(writer)
 
-    assert_equal 'message.txt', night_writer.input.file_path
+    assert_equal './test/txt_files/nw_message.txt', night_writer.input.file_path
     assert_equal 'braille.txt', night_writer.output.file_path
   end
 
   def test_it_can_print_a_confirmation_message
     night_writer = NightWriter.new
-    reader = ReadEnglish.new('message.txt', night_writer)
+    reader = ReadEnglish.new('./test/txt_files/nw_message.txt', night_writer)
     writer = WriteBraille.new('braille.txt', night_writer)
 
     night_writer.stubs(:input).returns(reader)
@@ -36,7 +36,7 @@ class NightWriterTest < Minitest::Test
 
   def test_can_know_reader_contents
     night_writer = NightWriter.new
-    reader = ReadEnglish.new('message.txt', night_writer)
+    reader = ReadEnglish.new('./test/txt_files/nw_message.txt', night_writer)
     writer = WriteBraille.new('braille.txt', night_writer)
 
     night_writer.stubs(:input).returns(reader)
