@@ -11,15 +11,23 @@ class WriteEnglish
     @file_path = file_path
     @night_reader = night_reader
     @file = night_reader.reader_contents
-    # write_file(sanitize_file(file))
+    write_file(sanitize_file(file))
   end
 
-  def write_file(input) ### get back to this
+  def write_file(input)
     return 'no file path given' if file_path.nil?
     File.delete(file_path) if File.exist?(file_path)
     input.each do |row|
-      File.open(file_path, "a") { |f| f.puts "#{row.join}" }
+      File.open(file_path, "a") { |f| f.puts "#{row}" }
     end
+  end
+
+  def sanitize_file(string = file)
+    rows = file_to_rows(string)
+    three_rows = multi_rows_to_three_rows(rows)
+    braille_rows = rows_to_braille(three_rows)
+    english = convert_to_english(braille_rows)
+    english.scan(/.{1,40}/)
   end
 
   def file_to_rows(string = file)
@@ -48,5 +56,9 @@ class WriteEnglish
       end
     end
     holder
+  end
+
+  def convert_to_english(array_of_braille)
+    array_of_braille.map { |braille| to_english[braille] }.join
   end
 end

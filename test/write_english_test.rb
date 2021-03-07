@@ -22,14 +22,24 @@ class WriteEnglishTest < Minitest::Test
   end
 
   def test_it_can_write_to_a_file ## get back to this
-    skip
+    # skip
     night_reader = mock
     night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
     writer = WriteEnglish.new('original_message.txt', night_reader)
 
-    writer.write_file([[0, "."], [".", "."], [".", "."]])
+    writer.write_file(['h'])
 
-    assert_equal "0.\n..\n..\n", File.read('braille.txt')
+    assert_equal "h\n", File.read('original_message.txt')
+  end
+
+  def test_it_can_sanitize_a_file
+    night_reader = mock
+    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
+    writer = WriteEnglish.new('original_message.txt', night_reader)
+
+    assert_equal ['h'], writer.sanitize_file
+    fourty_one_a = "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.\n................................................................................\n................................................................................\n0.\n..\n..\n"
+    assert_equal ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "a"], writer.sanitize_file(fourty_one_a)
   end
 
   def test_it_can_convert_to_english
@@ -79,5 +89,13 @@ class WriteEnglishTest < Minitest::Test
     assert_equal expected, writer.rows_to_braille([["0", '.', '.', '.'], ["0", "0", '.', '.'], ['.', '.', '.', '.']])
     big_expected = [["0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], ["0", "."], [".", "."], [".", "."] ]
     assert_equal 41, writer.rows_to_braille(writer.multi_rows_to_three_rows(big_expected)).size
+  end
+
+  def test_it_can_convert_braille_strings_to_english
+    night_reader = mock
+    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
+    writer = WriteEnglish.new('original_message.txt', night_reader)
+
+    assert_equal 'h ', writer.convert_to_english([["0", ".", "0", "0", ".", "."], [".", ".", ".", ".", ".", "."]])
   end
 end
