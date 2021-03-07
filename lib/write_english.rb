@@ -23,7 +23,30 @@ class WriteEnglish
   end
 
   def file_to_rows(string = file)
-    chars = string.delete("\n").split('')
-    chars.each_slice(chars.size/3).to_a
+    string.split("\n").map { |row| row.split('') }
+  end
+
+  def multi_rows_to_three_rows(multi_rows)
+    while multi_rows.size > 3
+      multi_rows.each_with_index.map do |row, index|
+        if index > 2
+          multi_rows[index-3] << row.flatten
+          multi_rows[index] = []
+        end
+      end
+      multi_rows.reject! { |row| row.empty? }
+    end
+    multi_rows.map(&:flatten)
+  end
+
+  def rows_to_braille(rows)
+    holder = []
+    rows.each_with_index.map do |row, index|
+      (row.size/2).times do |num|
+        holder[num] = [] if holder[num].nil?
+        holder[num] << row.shift << row.shift
+      end
+    end
+    holder
   end
 end
