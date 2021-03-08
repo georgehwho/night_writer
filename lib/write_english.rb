@@ -59,6 +59,13 @@ class WriteEnglish
   end
 
   def convert_to_english(array_of_braille)
-    array_of_braille.map { |braille| to_english[braille] }.join
+    array_of_braille.each_with_index.map do |braille, index|
+      if to_english[braille] == 'capitalize'
+        array_of_braille.delete_at(index)
+        to_english[array_of_braille[index]].upcase
+      else
+        to_english[braille]
+      end
+    end.join
   end
 end
