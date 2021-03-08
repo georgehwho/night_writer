@@ -97,5 +97,6 @@ class WriteEnglishTest < Minitest::Test
     writer = WriteEnglish.new('original_message.txt', night_reader)
 
     assert_equal 'h ', writer.convert_to_english([["0", ".", "0", "0", ".", "."], [".", ".", ".", ".", ".", "."]])
+    assert_equal "!',-.?", writer.convert_to_english([[".", ".", "0", "0", "0", "."], [".", ".", ".", ".", "0", "."], [".", ".", "0", ".", ".", "."], [".", ".", ".", ".", "0", "0"], [".", ".", "0", "0", ".", "0"], [".", ".", "0", ".", "0", "0"]])
   end
 end

@@ -62,6 +62,15 @@ class WriteBrailleTest < Minitest::Test
     assert_equal  "0.\n00\n..\n", File.read('braille.txt')
   end
 
+  def test_can_convert_symbols
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('h')
+
+    writer = WriteBraille.new('braille.txt', night_writer)
+    expected = [[[".", "."], [0, 0], [0, "."]], [[".", "."], [".", "."], [0, "."]], [[".", "."], [0, "."], [".", "."]], [[".", "."], [".", "."], [0, 0]], [[".", "."], [0, 0], [".", 0]], [[".", "."], [0, "."], [0, 0]]]
+    assert_equal expected, writer.convert_to_braille(%w[! ' , - . ?])
+  end
+
   def test_it_can_check_if_a_row_has_more_than_80_chars
     night_writer = mock
     night_writer.stubs(:reader_contents).returns('h')
