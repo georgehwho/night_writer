@@ -106,4 +106,23 @@ class WriteBrailleTest < Minitest::Test
     writer = WriteBraille.new('./test/txt_files/82_test_positions.txt', night_writer)
     assert_equal File.read('./test/txt_files/82_positions.txt'), File.read('./test/txt_files/82_test_positions.txt')
   end
+
+  def test_it_can_convert_to_capital
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns('h')
+
+    writer = WriteBraille.new('braille.txt', night_writer)
+
+    expected = [[[".", "."], [".", "."], [".", 0], [0, "."], [0, 0], [".", "."]]]
+    assert_equal expected, writer.convert_to_braille(['H'])
+  end
+
+  def test_it_can_convert_all_letters
+    # skip
+    night_writer = mock
+    night_writer.stubs(:reader_contents).returns(" !',-.?abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+    writer = WriteBraille.new('./test/txt_files/all_chars_test.txt', night_writer)
+    assert_equal File.read('./test/txt_files/all_chars.txt'), File.read('./test/txt_files/all_chars_test.txt')
+  end
 end

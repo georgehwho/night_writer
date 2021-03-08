@@ -23,19 +23,30 @@ class WriteBraille
   end
 
   def sanitize_file(string = file)
-    chars = string.downcase.delete("\n").chars
+    chars = string.delete("\n").chars
     arr_braille = convert_to_braille(chars)
     rows = braille_to_rows(arr_braille)
     check_more_than_80_chars(rows)
   end
 
   def convert_to_braille(chars)
-    chars.map { |char| to_braille[char] }
+    chars.each_with_index.map do |char, index|
+      if char == char.upcase && ![" ", "!", "'", ",", "-", ".", "?"].include?(char)
+        char = to_braille['capitalize'] + to_braille[char.downcase]
+      else
+        to_braille[char]
+      end
+    end
   end
 
   def braille_to_rows(array_of_braille)
     array_of_braille.reduce([[], [], []]) do |memo, braille|
-      memo.each_with_index { |arr, index| arr << braille[index] }
+      if braille.size > 3
+        memo.each_with_index { |arr, index| arr << braille[index] }
+        memo.each_with_index { |arr, index| arr << braille[index+3] }
+      else
+        memo.each_with_index { |arr, index| arr << braille[index] }
+      end
     end.map(&:flatten)
   end
 
