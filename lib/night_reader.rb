@@ -1,23 +1,33 @@
-require_relative 'read_file'
+require_relative 'file_manager'
 require_relative 'write_english'
 
 class NightReader
-  attr_reader :input,
-              :output
+  attr_reader :file_manager,
+              :translator
 
   def initialize
-    @input = ReadFile.new(ARGV[0])
-    @output = WriteEnglish.new(ARGV[1], self)
+    @file_manager = FileManager.new(ARGV[0], ARGV[1])
+    @translator = WriteEnglish.new
     puts confirmation
+    write_file
+  end
+
+  def write_file
+    file_manager.write_file(sanitize_file)
+  end
+
+  def sanitize_file
+    translator.sanitize_file(reader_contents)
   end
 
   def confirmation
-    "Created '#{ output.file_path }' containing #{ input.characters / 6 } characters"
+    "Created '#{file_manager.write}' containing #{file_manager.characters / 6} characters"
   end
 
   def reader_contents
-    input.file
+    file_manager.file
   end
 end
+
 
 NightReader.new

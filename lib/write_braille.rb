@@ -3,26 +3,7 @@ require_relative 'braille'
 class WriteBraille
   include Braille
 
-  attr_reader :file_path,
-              :night_writer,
-              :file
-
-  def initialize(file_path, night_writer)
-    @file_path = file_path
-    @night_writer = night_writer
-    @file = night_writer.reader_contents
-    write_file(sanitize_file(file))
-  end
-
-  def write_file(input)
-    return 'no file path given' if file_path.nil?
-    File.delete(file_path) if File.exist?(file_path)
-    input.each do |row|
-      File.open(file_path, "a") { |f| f.puts "#{row.join}" }
-    end
-  end
-
-  def sanitize_file(string = file)
+  def sanitize_file(string)
     chars = string.delete("\n").chars
     arr_braille = convert_to_braille(chars)
     rows = braille_to_rows(arr_braille)

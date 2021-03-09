@@ -3,69 +3,38 @@ require './lib/write_english'
 
 class WriteEnglishTest < Minitest::Test
   def test_it_exists
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
     assert_instance_of WriteEnglish, writer
   end
 
-  def test_it_has_readable_attributes
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-
-    writer = WriteEnglish.new('original_message.txt', night_reader)
-
-    assert_equal 'original_message.txt', writer.file_path
-    assert_equal "0.\n00\n..\n", writer.file
-  end
-
-  def test_it_can_write_to_a_file ## get back to this
-    # skip
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
-
-    writer.write_file(['h'])
-
-    assert_equal "h\n", File.read('original_message.txt')
-  end
-
   def test_it_can_sanitize_a_file
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
-    assert_equal ['h'], writer.sanitize_file
+    assert_equal ['h'], writer.sanitize_file("0.\n00\n..\n")
+
     fourty_one_a = "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.\n................................................................................\n................................................................................\n0.\n..\n..\n"
     assert_equal ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "a"], writer.sanitize_file(fourty_one_a)
   end
 
   def test_it_can_convert_to_english
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
     assert_equal 'h', writer.to_english[['0', '.', '0', '0', '.', '.']]
   end
 
   def test_it_can_go_from_file_to_rows
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
     assert_equal [["0", '.'], ["0", "0"], ['.', '.']], writer.file_to_rows("0.\n00\n..\n")
     assert_equal [["0", '.', '.', '.'], ["0", "0", '.', '.'], ['.', '.', '.', '.']], writer.file_to_rows("0...\n00..\n....\n")
 
-    edge_case_rows_test = "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.\n................................................................................\n................................................................................\n0.\n..\n..\n"
-    assert_equal 6, writer.file_to_rows(edge_case_rows_test).size
+    fourty_one_a = "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.\n................................................................................\n................................................................................\n0.\n..\n..\n"
+    assert_equal 6, writer.file_to_rows(fourty_one_a).size
   end
 
   def test_it_can_make_multi_rows_into_three_rows
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
     test_case = [
       ['.','.','u'],['.','.','u'],['.','.','u'],
@@ -81,31 +50,41 @@ class WriteEnglishTest < Minitest::Test
   end
 
   def test_it_can_go_from_rows_to_braille
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
     expected = [["0", ".", "0", "0", ".", "."], [".", ".", ".", ".", ".", "."]]
     assert_equal expected, writer.rows_to_braille([["0", '.', '.', '.'], ["0", "0", '.', '.'], ['.', '.', '.', '.']])
-    big_expected = [["0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."], ["0", "."], [".", "."], [".", "."] ]
-    assert_equal 41, writer.rows_to_braille(writer.multi_rows_to_three_rows(big_expected)).size
+
+    many_a_expected = [["0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", ".", "0", "."],
+                    [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                    [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+                    ["0", "."],
+                    [".", "."],
+                    [".", "."] ]
+    assert_equal 41, writer.rows_to_braille(writer.multi_rows_to_three_rows(many_a_expected)).size
   end
 
   def test_it_can_convert_braille_strings_to_english
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("0.\n00\n..\n") # this is h
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
-    assert_equal 'h ', writer.convert_to_english([["0", ".", "0", "0", ".", "."], [".", ".", ".", ".", ".", "."]])
-    assert_equal "!',-.?", writer.convert_to_english([[".", ".", "0", "0", "0", "."], [".", ".", ".", ".", "0", "."], [".", ".", "0", ".", ".", "."], [".", ".", ".", ".", "0", "0"], [".", ".", "0", "0", ".", "0"], [".", ".", "0", ".", "0", "0"]])
+    expected = [["0", ".", "0", "0", ".", "."],
+                [".", ".", ".", ".", ".", "."]]
+    assert_equal 'h ', writer.convert_to_english(expected)
+
+    expected_two = [[".", ".", "0", "0", "0", "."],
+                    [".", ".", ".", ".", "0", "."],
+                    [".", ".", "0", ".", ".", "."],
+                    [".", ".", ".", ".", "0", "0"],
+                    [".", ".", "0", "0", ".", "0"],
+                    [".", ".", "0", ".", "0", "0"]]
+    assert_equal "!',-.?", writer.convert_to_english(expected_two)
   end
 
   def test_it_can_convert_all_chars_to_english
-    night_reader = mock
-    night_reader.stubs(:reader_contents).returns("..............0.0.00000.00000..0.00.0.00000.00000..0.00.0..000000...0...0...00..\n..00..0...000...0....0.00.00000.00..0....0.00.00000.00..0.00...0.0......0.......\n..0.0...00.000....................0.0.0.0.0.0.0.0.0.0.0000.0000000.0...0...0...0\n00..0...00..00..0....0...0..0...0...00..00..0...00..00..0....0...0..0...0....0..\n.0...0..0...00..00..0...00......0........0...0..0...00..00..0...00......0...00..\n...0...0...0...0...0...0...00..00..00..00..00..00..00..00..00..00..000.000.0.0.0\n00..00..0.\n.....0...0\n00.000.000")
-    writer = WriteEnglish.new('original_message.txt', night_reader)
+    writer = WriteEnglish.new
 
-
-    assert_equal " !',-.?abcdefghijklmnopqrstuvwxyzABCDEFG\nHIJKLMNOPQRSTUVWXYZ\n", File.read('original_message.txt')
+    all_char_braille = "..............0.0.00000.00000..0.00.0.00000.00000..0.00.0..000000...0...0...00..\n..00..0...000...0....0.00.00000.00..0....0.00.00000.00..0.00...0.0......0.......\n..0.0...00.000....................0.0.0.0.0.0.0.0.0.0.0000.0000000.0...0...0...0\n00..0...00..00..0....0...0..0...0...00..00..0...00..00..0....0...0..0...0....0..\n.0...0..0...00..00..0...00......0........0...0..0...00..00..0...00......0...00..\n...0...0...0...0...0...0...00..00..00..00..00..00..00..00..00..00..000.000.0.0.0\n00..00..0.\n.....0...0\n00.000.000"
+    expected = [" !',-.?abcdefghijklmnopqrstuvwxyzABCDEFG", "HIJKLMNOPQRSTUVWXYZ"]
+    assert_equal expected, writer.sanitize_file(all_char_braille)
   end
 end
