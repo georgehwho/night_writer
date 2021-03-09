@@ -29,5 +29,4 @@ class NightReader
   end
 end
 
-
 NightReader.new
